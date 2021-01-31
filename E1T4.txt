@@ -1,0 +1,13 @@
+Based on the architecture diagram, and the steps you have taken so far to upload data and access the application web service, identify at least 2 obvious poor practices as it relates to security.  Include justification.
+
+# Poor practice 1
+IAM instance role does not follow the least privileged concept and grants permissions to perform any action to S3 buckets, and all resources in the account. The effect is to allow unrestricted access to all buckets which is a poor security practice.
+        {
+            "Action": "s3:*", --> Any and all actions, including delete bucket
+            "Resource": "*",  --> these permissions apply to any bucket 
+            "Effect": "Allow"
+        }
+
+
+# Poor practice 2
+The Web Application security group allows inbound traffic from all protocols and all ports to 0.0.0.0/0 IP address. This practice does not follow the least privileged concept and exposes the web server to attacks.
