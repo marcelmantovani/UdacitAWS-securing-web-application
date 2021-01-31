@@ -1,0 +1,21 @@
+
+
+# Identify 2-3 changes that can be made to our environment to prevent an ssh brute force attack from the internet.
+
+First change is to remove from the instance security group all rules allowing traffic on all ports except port 5000 as this is the port being used by Load Balancer to send request to the Web Server.
+
+Second change to the architecture could be to use WAF in front of the ALB.
+
+
+# Neither instance should have had access to the secret recipes bucket, in the even that instance API credentials were compromised how could we have prevented access to sensitive data.
+
+Any access to secret recipes can be blocked by define an Instance IAM role with explicit Allow access only to the free recipes bucket. Using a rule like this:
+        {
+            "Sid": "DenyExceptIfMyBucket",
+            "Effect": "Deny",
+            "Action": "s3:getObject",
+            "NotResource": [
+                "arn:aws:s3:::<<free_recipes_bucket_name>>",
+                "arn:aws:s3:::<<free_recipes_bucket_name>>/*"
+            ]
+        }

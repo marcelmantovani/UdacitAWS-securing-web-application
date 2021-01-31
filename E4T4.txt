@@ -1,0 +1,15 @@
+
+# What additional architectural change can be made to reduce the internet facing attack surface of the web application instance.
+One additional change can be to deploy the Web Servers in the private sub-nets and keep only the ALB in the public subnets. Then create VPC endpoints to S3 in order to allow access from the private subnet to S3 buckets. 
+
+
+
+# Assuming the IAM permissions for the S3 bucket are still insecure, would creating VPC private endpoints for S3 prevent the unauthorized access to the secrets bucket.
+No, even after creating the VPC endpoints the user/service would still be able to perform the actions as defined in the IAM role. VPC endpoints are useful for allowing private subnets to access S3 or other AWS public resources without the need to also allow access of said private subnet to the internet, but it the case of secrets bucket, the IAM role would expose the bucket as well.
+
+# Will applying default encryption setting to the s3 buckets encrypt the data that already exists?
+No. There is no change to the encryption of the objects that existed in the bucket before default encryption was enabled.
+
+
+# What would happen if the original cloud formation templates are applied to this environment.
+Assuming new stacks names would have been chosen, and that any CIDR range conflict would also be avoided, applying the original templates to same account would mean deploying resources as they were configured prior to the securities fixes made. In other words, it means deploying a weak and unsecure environment.

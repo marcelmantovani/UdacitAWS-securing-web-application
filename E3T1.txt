@@ -1,0 +1,8 @@
+# Describe GuardDuty findings that were detected related to the brute force attack
+
+GuardDuty detected and reported finding "UnauthorizedAccess:EC2/SSHBruteForce". The interface then offers details of the affected instance as well the originating location (Ip address). In the documentation the explanation of the assigned severity: Low if one of EC2 is the target; High if it is the source. 
+Having one of EC2 fleet as source of brute force attack suggests that that instance has already been compromised, and the perpetrators are then using it to launch further attacks.
+
+# Research the AWS Guard Duty documentation page and explain how GuardDuty may have detected this attack - i.e. what was its source of information.
+
+As explained in the documentation, "Guad Duty data sources are VPC Flow Logs, AWS CloudTrail management event logs, Cloudtrail S3 data event logs, and DNS logs". Utilizing the VPC Flow Logs it is possible to detect a brute force attack by the number of times a connection is attempted over a certain period of time from a certain IP address into one of EC2 instances. Determining the number of connections from the EC2 with a repeated destination IP address would allow the detection of the case when the instance is compromised and being used for launching attacks elsewhere.

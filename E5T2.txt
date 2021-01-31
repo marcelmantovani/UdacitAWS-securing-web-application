@@ -1,0 +1,65 @@
+# Identify tools that will allow you to do the following:
+
+## Scan infrastructure as code templates
+
+    Tool name:
+        Checkov (https://www.checkov.io/)
+
+    Main capabilities:
+        Checkov is a static code analysis tool for infrastructure-as-code. It scans cloud infrastructure managed in Terraform, Cloudformation, Kubernetes, Arm templates or Serverless Framework and detects misconfigurations.
+
+### Example vulnerability
+    From the tool's documentation page: https://www.checkov.io/1.Introduction/Results.html
+
+    Check: "S3 Bucket has an ACL defined which allows public access."
+        PASSED for resource: aws_s3_bucket.sls_deployment_bucket_name
+        File: /../regionStack/main.tf:23-32
+
+    Check: "Ensure the S3 bucket has access logging enabled"
+        FAILED for resource: aws_s3_bucket.template_bucket
+        File: /main.tf:81-92
+
+            81 | resource "aws_s3_bucket" "template_bucket" {
+            82 |   region        = var.region
+            83 |   bucket        = local.bucket_name
+            84 |   acl           = "public-read"
+            85 |   # checkov:skip=CKV_AWS_20: The bucket is a public static content host
+            86 |   acl           = "public-read"
+            87 |   force_destroy = true
+            88 |    # checkov:skip=CKV_AWS_19: Bucket access logs is not required for public content
+            89 |   tags = {
+            90 |     Name = "${local.bucket_name}-${data.aws_caller_identity.current.account_id}"
+            91 |   }
+            92 | }
+
+
+
+## Scan AMI’s or containers for OS vulnerabilities
+
+    Tool name: 
+        anchore (https://anchore.com/opensource/)
+
+    Main capabilities:
+        The Anchore engine is an open source project that inspects, analyzes, and certifies Docker images. Anchore is available as a Docker image that can be run standalone or with orchestration platforms such as Kubernetes. Anchore fetches security data from Anchore’s hosted cloud service. Anchore is also available as a Jenkins plugin, allowing you to integrate container image scanning as part of the CI/CD workflow.
+
+
+### Example vulnerability
+Vulnerability ID    Package                         Severity    Fix     Vulnerability URL
+
+CVE-2017-1000379    linux-libc-dev-4.9.88-1+deb9u1  High        None    https://security-tracker.debian.org/tracker/CVE-2017-1000379
+CVE-2017-14062      libidn11-1.33-1                 High        None    https://security-tracker.debian.org/tracker/CVE-2017-14062
+
+
+## Scan an AWS environment for cloud configuration vulnerabilities
+
+    Tool name: 
+        intruder.io (https://www.intruder.io/?utm_source=guide)
+
+    Main capabilities:
+        Intruder is an online vulnerability scanner that finds cyber security weaknesses in your digital infrastructure.
+
+### Example vulnerability
+    Results are presented in a dashboard classified by severity. Issues reported include:
+        Database exposed to Internet                        Medium
+        SQL Injection                                       Critical
+        DNS server vulnerable to Denial of Service (DoS)    Medium

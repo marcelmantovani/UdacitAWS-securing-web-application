@@ -1,0 +1,20 @@
+# Research and analyze which of the vulnerabilities appear to be related to the code that was deployed for the environment in this project.
+
+The following findings are related to the code deployed in this project:
+
+HIGH	CIS.4.1	Ensure no security groups allow ingress from 0.0.0.0/0 to port 22
+HIGH	CIS.4.2	Ensure no security groups allow ingress from 0.0.0.0/0 to port 3389
+MEDIUM	CIS.4.3	Ensure the default security group of every VPC restricts all traffic
+
+
+# Bonus - provide recommendations on how to remediate the vulnerabilities.
+
+HIGH	CIS.4.1	Ensure no security groups allow ingress from 0.0.0.0/0 to port 22
+    The remediation steps is either remove rule allowing TCP on port 22 or replace Cidr 0.0.0.0/0 line in c3-app.yml with a list of whitelisted IP addresses.
+
+HIGH	CIS.4.2	Ensure no security groups allow ingress from 0.0.0.0/0 to port 3389
+    The remediation step is to remove the ingress rule allowing traffic with IpProtocol: -1
+
+MEDIUM	CIS.4.3	Ensure the default security group of every VPC restricts all traffic
+    According to AWS documentation: Security Hub recommends that the default security group restrict all traffic.
+    In Cloudformation documentation (https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group.html) "The default rule is removed only when you specify one or more egress rules", which means c3-vpc.yml needs to be modified to have definition of ingress and egress rules on security group to block all traffic - this needs to be done to the default SG and therefore the block should not contain property "GroupName".
